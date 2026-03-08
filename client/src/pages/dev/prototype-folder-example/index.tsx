@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Description } from './-components/Description'
 
-export const Route = createFileRoute('/dev/prototype-example/')({
+export const Route = createFileRoute('/dev/prototype-folder-example/')({
   component: PrototypeExample,
 })
 
@@ -8,7 +9,7 @@ function PrototypeExample() {
   return (
     <main>
       <h1>Prototype Example</h1>
-      <p>prototype-eample sandbox.</p>
+      <Description />
     </main>
   )
 }
