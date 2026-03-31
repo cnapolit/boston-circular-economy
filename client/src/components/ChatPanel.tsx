@@ -1,17 +1,38 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ChatMessage as ChatMessageType } from '../types';
+import { organizations } from '../data/organizations';
 import ChatMessage from './ChatMessage';
 
 const OLLAMA_URL = 'http://localhost:11434/api/chat';
 const MODEL = 'phi4';
-const SYSTEM_PROMPT = `You are Zephyr, Boston's circular economy assistant. Help users find local organizations for reuse, repair, food rescue, clothing, tools, and building materials. Be concise and friendly. Do not answer unrelated questions.`;
+
+const orgDirectory = organizations
+  .map(o => {
+    const lines = [
+      `- **${o.name}** (${o.category})`,
+      `  Address: ${o.address}`,
+      `  Description: ${o.description}`,
+      o.website ? `  Website: ${o.website}` : null,
+      `  Tags: ${o.tags.join(', ')}`,
+    ];
+    return lines.filter(Boolean).join('\n');
+  })
+  .join('\n');
+
+const SYSTEM_PROMPT = `You are Zephyr, Boston's circular economy assistant. Help users find local organizations for reuse, repair, food rescue, clothing, tools, and building materials. Be concise and friendly. Do not answer unrelated questions.
+
+Here is the directory of circular economy organizations you know about:
+
+${orgDirectory}
+
+When a user asks about a topic, recommend the most relevant organizations from this directory. Include their name, address, and a brief reason why they match. If nothing matches well, say so honestly.`;
 
 let msgCounter = 0;
 const makeId = (role: string) => `msg-${Date.now()}-${msgCounter++}-${role}`;
 
 interface ChatPanelProps {
-  onViewMap?: () => void;
-  onViewResults?: () => void;
+  onViewMap?: (orgIds: string[]) => void;
+  onViewResults?: (orgIds: string[]) => void;
   isSliding?: boolean;
   initialMessage?: string;
 }
@@ -78,6 +99,15 @@ export default function ChatPanel({ onViewMap, onViewResults, isSliding, initial
           } catch { /* ignore partial JSON lines */ }
         }
       }
+
+      // Show action buttons if the response mentions any organization
+      const responseLower = fullText.toLowerCase();
+      const matchedOrgIds = organizations
+        .filter(o => responseLower.includes(o.name.toLowerCase()))
+        .map(o => o.id);
+      if (matchedOrgIds.length > 0) {
+        setMessages(prev => prev.map(m => m.id === agentId ? { ...m, showActions: true, orgIds: matchedOrgIds } : m));
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
       setMessages(prev => prev.map(m => m.id === agentId ? { ...m, text: `⚠️ ${msg}` } : m));
@@ -95,10 +125,10 @@ export default function ChatPanel({ onViewMap, onViewResults, isSliding, initial
         {messages.map(msg => (
           <div key={msg.id}>
             <ChatMessage message={msg} />
-            {msg.showActions && (
+            {msg.showActions && msg.orgIds && (
               <div className="chat-action-btns">
-                <button className="chat-view-map-btn" onClick={onViewMap}>View on Map →</button>
-                <button className="chat-view-results-btn" onClick={onViewResults}>View results →</button>
+                <button className="chat-view-map-btn" onClick={() => onViewMap?.(msg.orgIds!)}>View on Map →</button>
+                <button className="chat-view-results-btn" onClick={() => onViewResults?.(msg.orgIds!)}>View results →</button>
               </div>
             )}
           </div>

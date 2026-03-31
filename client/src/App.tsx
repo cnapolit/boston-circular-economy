@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { OrgFilter } from './types';
+import { organizations } from './data/organizations';
 import Header from './components/Header';
 import ChatPanel from './components/ChatPanel';
 import MapPanel from './components/MapPanel';
@@ -15,8 +16,13 @@ function App() {
   const [mapQuery, setMapQuery] = useState('');
   const [mapFilter, setMapFilter] = useState<OrgFilter | null>(null);
 
-  const handleViewMap = () => {
-    setMapQuery('bikes not bombs');
+  const orgQueryFromIds = (orgIds: string[]) => {
+    const org = organizations.find(o => o.id === orgIds[0]);
+    return org ? org.name.toLowerCase() : '';
+  };
+
+  const handleViewMap = (orgIds: string[]) => {
+    setMapQuery(orgQueryFromIds(orgIds));
     setMapFilter(null);
     setIsSlidingUp(true);
     setTimeout(() => {
@@ -44,7 +50,7 @@ function App() {
         {activeTab !== 'search'
           ? <ChatPanel
               onViewMap={handleViewMap}
-              onViewResults={() => { setMapQuery('bikes not bombs'); setMapFilter(null); setActiveTab('search'); }}
+              onViewResults={(orgIds: string[]) => { setMapQuery(orgQueryFromIds(orgIds)); setMapFilter(null); setActiveTab('search'); }}
               isSliding={isSlidingUp}
               initialMessage={pendingChatMessage}
             />
