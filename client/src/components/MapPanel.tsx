@@ -86,28 +86,6 @@ export default function MapPanel({ mapQuery, setMapQuery, mapFilter, setMapFilte
 
   return (
     <div className="map-panel">
-      <div className="map-search-wrap">
-        <div className="search-input-area">
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Search by name, category, or item…"
-            value={mapQuery}
-            onChange={e => setMapQuery(e.target.value)}
-          />
-          <div className="search-filters">
-            {MAP_FILTERS.map(filter => (
-              <button
-                key={filter}
-                className={`search-filter-btn${mapFilter === filter ? ' search-filter-btn--active' : ''}`}
-                onClick={() => setMapFilter(mapFilter === filter ? null : filter)}
-              >
-                {filter}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
       <MapContainer
         center={BOSTON_CENTER}
         zoom={12}
@@ -152,6 +130,28 @@ export default function MapPanel({ mapQuery, setMapQuery, mapFilter, setMapFilte
           );
         })}
       </MapContainer>
+      <div className="map-search-wrap">
+        <div className="search-input-area">
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Search by name, category, or item…"
+            value={mapQuery}
+            onChange={e => setMapQuery(e.target.value)}
+          />
+          <div className="search-filters">
+            {MAP_FILTERS.map(filter => (
+              <button
+                key={filter}
+                className={`search-filter-btn${mapFilter === filter ? ' search-filter-btn--active' : ''}`}
+                onClick={() => setMapFilter(mapFilter === filter ? null : filter)}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -46,27 +46,6 @@ export default function SearchPanel({ onOrgViewOnMap, initialQuery, query, setQu
 
   return (
     <section className="search-panel">
-      <div className="search-input-area">
-        <input
-          className="search-input"
-          type="text"
-          placeholder="Search by name, category, or item…"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          autoFocus
-        />
-        <div className="search-filters">
-          {FILTERS.map(filter => (
-            <button
-              key={filter}
-              className={`search-filter-btn${activeFilter === filter ? ' search-filter-btn--active' : ''}`}
-              onClick={() => handleFilterClick(filter)}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-      </div>
       <div className="search-results">
         {results.length === 0 ? (
           <p className="search-empty">No organizations match "{query}".</p>
@@ -92,6 +71,27 @@ export default function SearchPanel({ onOrgViewOnMap, initialQuery, query, setQu
             </div>
           ))
         )}
+      </div>
+      <div className="search-input-area">
+        <input
+          className="search-input"
+          type="text"
+          placeholder="Search by name, category, or item…"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          autoFocus
+        />
+        <div className="search-filters">
+          {FILTERS.map(filter => (
+            <button
+              key={filter}
+              className={`search-filter-btn${activeFilter === filter ? ' search-filter-btn--active' : ''}`}
+              onClick={() => handleFilterClick(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );

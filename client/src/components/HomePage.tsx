@@ -55,38 +55,6 @@ export default function HomePage({ onSearch, onChatSearch }: HomePageProps) {
         </div>
       </div>
 
-      {/* Search bar */}
-      <div className="home-search-wrap">
-        <div className="home-search-inner">
-          <svg className="home-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <input
-            className="home-search-input"
-            type="text"
-            placeholder={searchMode === 'chat' ? 'Ask about food, clothing, repair…' : 'Search organizations, items…'}
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') handleSearchActivate(); }}
-          />
-          <div className="home-search-mode-toggle">
-            <button
-              className={`home-search-mode-btn${searchMode === 'chat' ? ' home-search-mode-btn--active' : ''}`}
-              onClick={() => setSearchMode('chat')}
-            >
-              Chat
-            </button>
-            <button
-              className={`home-search-mode-btn${searchMode === 'browse' ? ' home-search-mode-btn--active' : ''}`}
-              onClick={() => setSearchMode('browse')}
-            >
-              Browse
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Recently Visited */}
       <div className="home-section">
         <h2 className="home-section__title">Recently Visited</h2>
@@ -123,6 +91,38 @@ export default function HomePage({ onSearch, onChatSearch }: HomePageProps) {
               <span className="home-activity-pts">+{item.points} pts</span>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Search bar */}
+      <div className="home-search-wrap">
+        <div className="home-search-inner">
+          <svg className="home-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            className="home-search-input"
+            type="text"
+            placeholder={searchMode === 'chat' ? 'Ask about food, clothing, repair…' : 'Search organizations, items…'}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleSearchActivate(); }}
+          />
+          <div className="home-search-mode-toggle">
+            <button
+              className={`home-search-mode-btn${searchMode === 'chat' ? ' home-search-mode-btn--active' : ''}`}
+              onClick={() => setSearchMode('chat')}
+            >
+              Chat
+            </button>
+            <button
+              className={`home-search-mode-btn${searchMode === 'browse' ? ' home-search-mode-btn--active' : ''}`}
+              onClick={() => setSearchMode('browse')}
+            >
+              Browse
+            </button>
+          </div>
         </div>
       </div>
     </div>
