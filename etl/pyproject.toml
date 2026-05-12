@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "ETL pipeline for collecting and normalizing circular economy location data"
 requires-python = ">=3.14"
 dependencies = [
+    "pyap>=0.3.1",
     "pydantic>=2.13.3",
+    "requests>=2.34.0",
 ]
 
 [dependency-groups]
